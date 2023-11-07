@@ -23,12 +23,6 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      Timer.periodic(const Duration(milliseconds: 50), (timer) {
-        setState(() {});
-      });
-    });
   }
 
   @override

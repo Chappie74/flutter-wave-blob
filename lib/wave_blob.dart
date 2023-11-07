@@ -1,4 +1,7 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:wave_blob/wave_drawable.dart';
 import 'package:wave_blob/wave_paint.dart';
 
@@ -52,6 +55,8 @@ class WaveBlob extends StatefulWidget {
 
 class _WaveBlobState extends State<WaveBlob> {
   List<WaveDrawable> blobs = [];
+  late Timer _periodicTimer;
+  late Ticker _ticker;
 
   @override
   void initState() {
@@ -61,35 +66,65 @@ class _WaveBlobState extends State<WaveBlob> {
     for (int i = 0; i < length; i++) {
       blobs.add(WaveDrawable(8 + i));
     }
+
+    // Initialize the Ticker for animation
+    _ticker = Ticker((_) {
+      _updateBlobs();
+    });
+
+    // Start the periodic timer to update the blobs every 500ms
+    _periodicTimer = Timer.periodic(const Duration(milliseconds: 500), (_) {
+      _ticker.start();
+    });
+  }
+
+  @override
+  void dispose() {
+    _periodicTimer.cancel();
+    _ticker.dispose();
+    super.dispose();
+  }
+
+  void _updateBlobs() {
+    for (int i = 0; i < blobs.length; i++) {
+      blobs[i].setAmplitude(widget.amplitude);
+      // Set other properties and update as needed
+    }
+    setState(() {}); // Trigger a repaint
   }
 
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) {
-        bool hasInfiniteDimension = (constraints.maxWidth == double.infinity ||
-            constraints.maxHeight == double.infinity);
+        return LayoutBuilder(
+          builder: (context, constraints) {
+            bool hasInfiniteDimension =
+                (constraints.maxWidth == double.infinity ||
+                    constraints.maxHeight == double.infinity);
 
-        if (hasInfiniteDimension) {
-          ErrorWidget.builder = (error) => Container();
-          throw ("Can't get Infinite width or height. Please set dimensions for BlobWave widget");
-        }
+            if (hasInfiniteDimension) {
+              ErrorWidget.builder = (error) => Container();
+              throw ("Can't get Infinite width or height. Please set dimensions for BlobWave widget");
+            }
 
-        return CustomPaint(
-          painter: WavePaint(
-            waves: blobs,
-            width: constraints.maxWidth,
-            height: constraints.maxHeight,
-            scale: widget.scale,
-            amplitude: widget.amplitude,
-            autoScale: widget.autoScale,
-            overCircle: widget.overCircle,
-            centerCircle: widget.centerCircle,
-            circleColors: widget.circleColors,
-            colors: widget.colors,
-            speed: widget.speed,
-          ),
-          child: widget.child,
+            return CustomPaint(
+              painter: WavePaint(
+                waves: blobs,
+                width: constraints.maxWidth,
+                height: constraints.maxHeight,
+                scale: widget.scale,
+                amplitude: widget.amplitude,
+                autoScale: widget.autoScale,
+                overCircle: widget.overCircle,
+                centerCircle: widget.centerCircle,
+                circleColors: widget.circleColors,
+                colors: widget.colors,
+                speed: widget.speed,
+              ),
+              child: widget.child,
+            );
+          },
         );
       },
     );
