@@ -35,6 +35,9 @@ class WaveBlob extends StatefulWidget {
   /// Color of center circle. Sets two or more colors for gradient
   final List<Color>? circleColors;
 
+  /// Boolean for if the waves should show
+  final bool showWaves;
+
   const WaveBlob({
     super.key,
     required this.child,
@@ -46,6 +49,7 @@ class WaveBlob extends StatefulWidget {
     this.overCircle = true,
     this.centerCircle = true,
     this.circleColors,
+    this.showWaves = false,
     this.colors,
   });
 
@@ -113,22 +117,24 @@ class _WaveBlobState extends State<WaveBlob> {
               throw ("Can't get Infinite width or height. Please set dimensions for BlobWave widget");
             }
 
-            return CustomPaint(
-              painter: WavePaint(
-                waves: blobs,
-                width: constraints.maxWidth,
-                height: constraints.maxHeight,
-                scale: widget.scale,
-                amplitude: widget.amplitude,
-                autoScale: widget.autoScale,
-                overCircle: widget.overCircle,
-                centerCircle: widget.centerCircle,
-                circleColors: widget.circleColors,
-                colors: widget.colors,
-                speed: widget.speed,
-              ),
-              child: widget.child,
-            );
+            return widget.showWaves
+                ? CustomPaint(
+                    painter: WavePaint(
+                      waves: blobs,
+                      width: constraints.maxWidth,
+                      height: constraints.maxHeight,
+                      scale: widget.scale,
+                      amplitude: widget.amplitude,
+                      autoScale: widget.autoScale,
+                      overCircle: widget.overCircle,
+                      centerCircle: widget.centerCircle,
+                      circleColors: widget.circleColors,
+                      colors: widget.colors,
+                      speed: widget.speed,
+                    ),
+                    child: widget.child,
+                  )
+                : widget.child;
           },
         );
       },
