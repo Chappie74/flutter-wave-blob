@@ -41,7 +41,7 @@ class WaveDrawable {
     _angleNext = List.filled(N, 0.0);
     _progress = List.filled(N, 0.0);
     _speed = List.filled(N, 0.0);
-
+    print(_minRadius);
     for (int i = 0; i < N; i++) {
       _generateBlob(_radius, _angle, i);
       _generateBlob(_radiusNext, _angleNext, i);
@@ -167,8 +167,9 @@ class WaveDrawable {
   }
 
   void _generateBlob(List<double> r, List<double> a, int i) {
-    double angleDif = 360 / N * 0.05;
+    double angleDif = 360 / N * 0.9;
     double radDif = _maxRadius - _minRadius;
+    // print(radDif);
     r[i] = _minRadius + ((Utils.randomNumber % 100) / 100).abs() * radDif;
     a[i] = 360 / N * i + ((Utils.randomNumber % 100) / 100) * angleDif;
     _speed[i] = (0.017 + 0.003 * ((Utils.randomNumber % 100).abs() / 100));

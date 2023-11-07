@@ -56,7 +56,7 @@ class WaveBlob extends StatefulWidget {
 class _WaveBlobState extends State<WaveBlob> {
   List<WaveDrawable> blobs = [];
   late Timer _periodicTimer;
-  late Ticker _ticker;
+  Ticker? _ticker;
 
   @override
   void initState() {
@@ -74,14 +74,19 @@ class _WaveBlobState extends State<WaveBlob> {
 
     // Start the periodic timer to update the blobs every 500ms
     _periodicTimer = Timer.periodic(const Duration(milliseconds: 500), (_) {
-      _ticker.start();
+      if (_ticker == null || !_ticker!.isTicking) {
+        _ticker = Ticker((_) {
+          _updateBlobs();
+        });
+        _ticker!.start();
+      }
     });
   }
 
   @override
   void dispose() {
     _periodicTimer.cancel();
-    _ticker.dispose();
+    _ticker?.dispose();
     super.dispose();
   }
 

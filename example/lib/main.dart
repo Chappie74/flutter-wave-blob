@@ -84,14 +84,10 @@ class _MyAppState extends State<MyApp> {
               ),
               const SizedBox(height: 20.0),
               Container(
-                width: MediaQuery.sizeOf(context).width * 0.8,
-                height: MediaQuery.sizeOf(context).width * 0.8,
-                decoration: BoxDecoration(
-                  color: Colors.white12,
-                  borderRadius: BorderRadius.circular(8.0),
-                ),
+                width: 100,
+                height: 100,
                 child: WaveBlob(
-                  blobCount: 2,
+                  blobCount: 6,
                   amplitude: _amplitude,
                   scale: _scale,
                   autoScale: _autoScale,
@@ -99,7 +95,11 @@ class _MyAppState extends State<MyApp> {
                   overCircle: true,
                   circleColors: const [
                     /// If you don't want use Gradient, set just one color
-                    Colors.blue,
+                    Colors.black,
+                  ],
+                  colors: [
+                    Colors.red.withOpacity(0.2),
+                    Colors.red.withOpacity(0.2)
                   ],
                   child: const Icon(
                     Icons.mic,
