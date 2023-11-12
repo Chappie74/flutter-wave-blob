@@ -71,6 +71,8 @@ class _WaveBlobState extends State<WaveBlob> {
       blobs.add(WaveDrawable(8 + i));
     }
 
+    _updateBlobs();
+    
     // Initialize the Ticker for animation
     _ticker = Ticker((_) {
       _updateBlobs();
