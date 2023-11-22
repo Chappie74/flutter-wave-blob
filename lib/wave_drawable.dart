@@ -167,7 +167,7 @@ class WaveDrawable {
   }
 
   void _generateBlob(List<double> r, List<double> a, int i) {
-    double angleDif = 360 / N * 0.9;
+    double angleDif = 360 / N * 0.05;
     double radDif = _maxRadius - _minRadius;
     // print(radDif);
     r[i] = _minRadius + ((Utils.randomNumber % 100) / 100).abs() * radDif;
